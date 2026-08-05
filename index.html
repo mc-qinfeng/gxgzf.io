@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC原版 - 大型生存服务器</title>
+    <!-- 设置 favicon -->
+    <link rel="icon" href="./QQ图片20260805115917.jpg" type="image/x-icon">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #1a1a1a;
+            color: #e5e5e5;
+        }
+        .mc-btn {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQI12NgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='); /* Fallback */
+            background-color: #727272;
+            border: 2px solid #000;
+            box-shadow: inset -2px -4px #3b3b3b, inset 2px 2px #a8a8a8;
+            transition: all 0.1s;
+        }
+        .mc-btn:hover {
+            background-color: #858585;
+        }
+        .mc-btn:active {
+            box-shadow: inset 2px 4px #3b3b3b, inset -2px -2px #a8a8a8;
+            transform: translateY(2px);
+        }
+        .pixel-border {
+            box-shadow: 
+                -4px 0 0 0 black,
+                4px 0 0 0 black,
+                0 -4px 0 0 black,
+                0 4px 0 0 black;
+            margin: 4px;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./QQ图片20260805114149.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4ade80;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-green-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-cube text-green-500 text-2xl"></i>
+                    <span class="font-black text-xl tracking-wider text-white">呱兄<span class="text-green-500">服务器</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">首页</a>
+                        <a href="#features" class="hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">特色玩法</a>
+                        <a href="#gallery" class="hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">服务器截图</a>
+                        <a href="#rules" class="hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">服规</a>
+                        <a href="#" onclick="openModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-lg transform hover:scale-105 transition-all font-bold">
+                            <i class="fa-solid fa-user-plus mr-2"></i>加入QQ群
+                        </a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-gray-800" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">首页</a>
+                <a href="#features" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">特色玩法</a>
+                <a href="#gallery" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">服务器截图</a>
+                <a href="#" onclick="openModal()" class="text-green-400 font-bold block px-3 py-2 rounded-md text-base">加入社区</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg h-screen flex items-center justify-center relative">
+        <div class="text-center px-4 max-w-4xl mx-auto z-10">
+            <div class="mb-6 floating">
+                <i class="fa-solid fa-server text-6xl text-green-500 drop-shadow-lg"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-4 drop-shadow-md tracking-tight">
+               星宇无限 <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">探索不停</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 mb-8 font-light">
+                1.21.11 纯净生存 | 玩家交流
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <button onclick="copyIP()" class="relative mc-btn px-8 py-4 bg-gray-800 rounded leading-none flex items-center divide-x divide-gray-600">
+                        <span class="flex items-center space-x-5">
+                            <span class="pr-6 text-gray-100 font-mono text-lg" id="server-ip">gxgzf.v6.navy:53412</span>
+                        </span>
+                        <span class="pl-6 text-green-400 group-hover:text-green-300 transition duration-200 font-bold">
+                            <i class="fa-regular fa-copy"></i> 点击复制
+                        </span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-2 text-green-400 font-mono bg-black/50 px-4 py-2 rounded border border-green-900/50">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span id="player-count">加载中...</span> 在线玩家
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-400">
+            <i class="fa-solid fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">为什么来我们服务器</h2>
+                <div class="h-1 w-20 bg-green-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-green-500/50 transition-all duration-300 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 bg-green-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-green-500/20 transition-colors">
+                        <i class="fa-solid fa-shield-halved text-2xl text-green-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">管理系统</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        呱兄（gxgzf）、EnderPhantomWing、orongo、水鱼号（CRGZ）几位管理员每天上线，严格处置违规玩家
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 bg-blue-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors">
+                        <i class="fa-solid fa-coins text-2xl text-blue-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">平衡经济体系</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        出生点西北方交易中心村民交易、同时，玩家之间也可随时交易、赠礼
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-2 group">
+                    <div class="w-14 h-14 bg-purple-900/30 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-500/20 transition-colors">
+                        <i class="fa-solid fa-dungeon text-2xl text-purple-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">服务器活动</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        服主不定时展开抽奖活动，合金套、鞘翅等物品等你来拿：））））
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-2">服务器风采</h2>
+                    <p class="text-gray-400">服务器建筑与地区</p>
+                    
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="group relative overflow-hidden rounded-xl aspect-video cursor-pointer">
+                    <img src="./QQ图片20260805122048.jpg" alt="主城广场" class="object-cover w-full h-full transform group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+                        <span class="text-white font-bold">主城广场</span>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-xl aspect-video cursor-pointer">
+                    <img src="./QQ图片20260805114041.jpg" alt="复兴城城区" class="object-cover w-full h-full transform group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+                        <span class="text-white font-bold">复兴城城区</span>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden rounded-xl aspect-video cursor-pointer">
+                    <img src="./QQ图片20260805114003.jpg" alt="风原经济中心" class="object-cover w-full h-full transform group-hover:scale-110 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
+                        <span class="text-white font-bold">风原经济中心</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Section -->
+    <section id="rules" class="py-20 bg-gray-900 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-green-500/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12">服务器规则</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-gray-800/50 border-l-4 border-red-500 p-6 rounded-r-lg backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-ban text-red-500"></i> 禁止作弊
+                    </h3>
+                    <p class="text-gray-400 mt-2">严禁使用任何外挂、辅助客户端（如X-Ray、KillAura等）。违者永久封禁。</p>
+                </div>
+                
+                <div class="bg-gray-800/50 border-l-4 border-yellow-500 p-6 rounded-r-lg backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-yellow-500"></i> 文明交流
+                    </h3>
+                    <p class="text-gray-400 mt-2">禁止在公屏辱骂、刷屏、发布广告或敏感政治言论。保持友好的社区氛围。</p>
+                </div>
+                
+                <div class="bg-gray-800/50 border-l-4 border-blue-500 p-6 rounded-r-lg backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-house-chimney-crack text-blue-500"></i> 禁止破坏
+                    </h3>
+                    <p class="text-gray-400 mt-2">严禁恶意破坏他人建筑、偷窃他人财物。虽然我们有领地保护，但请尊重他人劳动成果。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-cube text-green-500 text-xl"></i>
+                        <span class="font-bold text-xl text-white">呱兄服务器</span>
+                    </div>
+                    <p class="text-gray-500 text-sm max-w-xs">
+                        致力于提供最优质的Minecraft生存体验。加入我们，开始你的冒险之旅！！！
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">快速链接</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>24小时全天开服！</li>
+                        <li>关注b站账号赞助！</li>
+                        <li>白名单申请请加q群</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">联系我们</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><i class="fa-brands fa-qq mr-2"></i> 1050067208</li>
+                        <li><i class="fa-solid fa-envelope mr-2"></i> 2650921423@qq.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-600 text-sm">
+                <p>&copy; 2026 gxgzf Server. All rights reserved. Not affiliated with Mojang AB.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for QQ Group -->
+    <div id="qqModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-700">
+                <div class="bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-900 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fa-brands fa-qq text-green-400 text-xl"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">加入玩家社区</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-400 mb-4">
+                                    关注b站号或搜索群号加入我们的QQ群，获取最新资讯和福利。
+                                </p>
+                                <div class="bg-white p-2 rounded-lg inline-block mb-4">
+                                    <!-- Placeholder QR Code -->
+                                    <img src="./QQ图片20260805115917.jpg" alt="QQ群二维码占位符" class="w-48 h-48">
+                                </div>
+                                <p class="text-sm text-gray-400 mb-4">
+                                    b站账号：@呱兄
+                                </p>
+                                <div class="flex items-center justify-between bg-gray-700 p-3 rounded">
+                                    <span class="text-white font-mono">群号: 1050067208</span>
+                                    <button onclick="copyQQ()" class="text-green-400 hover:text-white text-sm font-bold">复制</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">
+                        关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-800 border border-green-500 text-white px-6 py-3 rounded shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-[70] flex items-center gap-3">
+        <i class="fa-solid fa-check-circle text-green-500"></i>
+        <span id="toast-message">已复制到剪贴板</span>
+    </div>
+
+    <script>
+        // Configuration
+        const SERVER_IP = "gxgzf.v6.navy:53412";
+        const QQ_GROUP = "1050067208";
+
+        // Copy IP Function
+        function copyIP() {
+            navigator.clipboard.writeText(SERVER_IP).then(() => {
+                showToast("服务器地址已复制: " + SERVER_IP);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Copy QQ Function
+        function copyQQ() {
+            navigator.clipboard.writeText(QQ_GROUP).then(() => {
+                showToast("群号已复制: " + QQ_GROUP);
+            });
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.innerText = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('qqModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('qqModal').classList.add('hidden');
+        }
+
+        // Simulate Player Count Fetching
+        function fetchPlayerCount() {
+            // In a real scenario, you would fetch from an API like mcsrvstat.us
+            // For this template, we simulate a random number between 50 and 200
+            const count = Math.floor(Math.random() * (200 - 50 + 1)) + 50;
+            document.getElementById('player-count').innerText = count;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPlayerCount();
+            // Refresh player count every 60 seconds
+            setInterval(fetchPlayerCount, 60000);
+        });
+    </script>
+</body>
+</html>
