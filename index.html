@@ -387,15 +387,46 @@
         function closeModal() {
             document.getElementById('qqModal').classList.add('hidden');
         }
+// 实时获取玩家数量
+async function fetchPlayerCount() {
+    const serverAddress = 'gxgzf.v6.navy';
+    const serverPort = 53412;
+    const playerCountElement = document.getElementById('player-count');
 
-        // Simulate Player Count Fetching
-        function fetchPlayerCount() {
-            // In a real scenario, you would fetch from an API like mcsrvstat.us
-            // For this template, we simulate a random number between 0 and 16
-            const count = Math.floor(Math.random() * (20 - 6 + 1)) + 5;
-            document.getElementById('player-count').innerText = count;
+    try {
+        // 调用 mcsrvstat.us API 获取服务器状态
+        // 格式: https://api.mcsrvstat.us/2/<host>:<port>
+        const response = await fetch(`https://api.mcsrvstat.us/2/${serverAddress}:${serverPort}`);
+        
+        if (!response.ok) {
+            throw new Error('网络请求失败');
         }
 
+        const data = await response.json();
+
+        // 检查服务器是否在线
+        if (data.online) {
+            // 更新页面上的玩家数量
+            playerCountElement.innerText = `${data.players.online}/${data.players.max}`;
+            
+            // 可选：如果只想显示在线人数，使用下面这行：
+            // playerCountElement.innerText = data.players.online;
+        } else {
+            // 服务器离线时的处理
+            playerCountElement.innerText = '离线';
+            console.warn('服务器当前处于离线状态');
+        }
+    } catch (error) {
+        console.error('获取玩家数量失败:', error);
+        playerCountElement.innerText = '错误';
+    }
+}
+
+// 页面加载时立即执行一次
+fetchPlayerCount();
+
+// 可选：每 60 秒自动刷新一次数据
+setInterval(fetchPlayerCount, 60000);
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             fetchPlayerCount();
